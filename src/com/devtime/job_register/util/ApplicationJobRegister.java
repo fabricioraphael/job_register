@@ -16,6 +16,7 @@ public class ApplicationJobRegister extends Application{
 		
 		try {
 			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			
 			if (connectivityManager != null) {
 				NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
