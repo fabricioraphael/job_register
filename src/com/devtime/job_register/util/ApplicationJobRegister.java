@@ -9,11 +9,8 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class ApplicationJobRegister extends Application{
-
 	
-	public static String getNetworkSSID(Context context) {
-		String networkSSID = "";
-		
+	public static WifiInfo getNetworkWifi(Context context) {
 		try {
 			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			
@@ -23,15 +20,12 @@ public class ApplicationJobRegister extends Application{
 				if (networkInfo != null) {
 					WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 					WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-					networkSSID = wifiInfo.getSSID();
 					
-					Log.i("MainActivity", "NetworkSSID: " + networkSSID);
-					
-					return networkSSID;
+					return wifiInfo;
 				}
 			}
 		} catch (Exception e) {
-			Log.e("MainActivity", "[Exception] checkNetworkConnection" + e.toString());
+			Log.e("ApplicationJobRegister", "[Exception] checkNetworkConnection" + e.toString());
 			return null;
 		}
 

@@ -4,5 +4,7 @@
     <string name="app_name">job_register</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <string name="preferencias">Preferencias</string>
 
 </resources>
