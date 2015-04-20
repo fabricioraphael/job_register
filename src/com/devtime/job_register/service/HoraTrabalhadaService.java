@@ -28,18 +28,20 @@ public class HoraTrabalhadaService {
 	}
 	
 	private void salvaHoraInicio(Rede redeConectada){
+		Log.i("MainActivity", "Salvando Hora Inicio para rede id: " + redeConectada.getId());
+
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
 		values.put("hora_inicio", new Date().getTime());
 		values.put("rede_id", redeConectada.getId());
 		
-		Log.i("MainActivity", "Salvando Hora Inicio: " + values.get("hora_inicio") + ", para rede id: " + redeConectada.getId());
-		
 		db.insert(TabelaEnum.HORA_TRABALHADA.getNome(), null, values);
 	}
 	
 	private void salvaHoraFim(Rede redeDesconectada){
+		Log.i("MainActivity", "Salvando Hora Fim para rede id: " + redeDesconectada.getId());
+
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		
 		String sql = "SELECT _id FROM " + TabelaEnum.HORA_TRABALHADA.getNome()  + " WHERE rede_id = ? and hora_fim IS NULL LIMIT 1";
@@ -53,7 +55,6 @@ public class HoraTrabalhadaService {
 		ContentValues values = new ContentValues();
 		values.put("hora_fim", new Date().getTime());
 		
-		Log.i("MainActivity", "Salvando Hora Fim: " + values.get("hora_fim") + ", para rede id: " + redeDesconectada.getId());
 		
 		db.update(TabelaEnum.HORA_TRABALHADA.getNome(), values, "_id=?", new String[]{horaId + ""});
 	}

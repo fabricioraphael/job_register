@@ -54,6 +54,10 @@ public class RedeService {
 		
 		cursor.moveToFirst();
 		
-		return cursor.getLong(0);
+		if(cursor.getCount() > 0){
+			return cursor.getLong(0);
+		}
+
+		return 0;
 	}
 }

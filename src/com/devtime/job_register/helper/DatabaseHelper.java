@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "db_job_register";
-	private static int VERSION = 2;
+	private static int VERSION = 3;
 	
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, VERSION);
@@ -35,10 +35,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 */
 	private void initDatabase(SQLiteDatabase db){
 		String sql = "CREATE TABLE hora_trabalhada (_id INTEGER PRIMARY KEY,"
-				+ "hora_inicio DATE, "
-				+ "hora_fim DATE, "
-				+ "rede_id, "
-				+ "usuario_id); ";
+				+ "hora_inicio DATE NOT NULL, "
+				+ "hora_fim DATE NULL, "
+				+ "rede_id INTEGER NOT NULL, "
+				+ "usuario_id INTEGER); ";
 		
 		db.execSQL(sql);
 		
