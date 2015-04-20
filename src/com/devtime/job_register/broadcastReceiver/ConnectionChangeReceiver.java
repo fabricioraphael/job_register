@@ -13,6 +13,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.devtime.job_register.TimeControl;
+import com.devtime.job_register.domain.Rede;
+import com.devtime.job_register.helper.DatabaseHelper;
+import com.devtime.job_register.service.RedeService;
 import com.devtime.job_register.util.ApplicationJobRegister;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
@@ -20,7 +23,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 	private static final Long MINUT_IN_MILESECONDS = 60000l;
 	
 	private Long lastCheck;
-	private String lastNetwork;
+	private WifiInfo lastNetwork;
+	
+	private DatabaseHelper database;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -37,11 +42,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 		WifiInfo wifi = ApplicationJobRegister.getNetworkWifi(context);
 		
-		Log.i("MainActivity", "Atual: " + wifi.getMacAddress() + ". Ultima: " + lastNetwork);
+		if(lastNetwork != null){
+			Log.i("MainActivity", "Atual: " + wifi.getSSID() + ". Ultima: " + lastNetwork.getSSID());
 		
-		if(wifi.getMacAddress().equals(lastNetwork)){
-			Log.i("MainActivity", "Mesma rede ja conectada foi detectada, segue a vida...");
-			return;
+			if(wifi.getMacAddress().equals(lastNetwork.getMacAddress()) && 
+					wifi.getSSID().equals(lastNetwork.getSSID())){
+				Log.i("MainActivity", "Mesma rede ja conectada foi detectada, segue a vida...");
+				return;
+			}
 		}
 
 		if(lastCheck != null){
@@ -59,16 +67,30 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			Log.i("MainActivity", "PRIMEIRA CONEXAO IDENTIFICADA");
 		}
 		
+		Rede rede = new Rede();
+		rede.setIp(wifi.getIpAddress() + "");
+		rede.setMacAddress(wifi.getMacAddress());
+		rede.setSsid(wifi.getSSID());
+		rede.setTipoId(activeNetInfo.getType());
+		rede.setTipoDescricao(activeNetInfo.getTypeName());
+		
 		Log.i("MainActivity", ">> TYPE : " + activeNetInfo.getTypeName());
 		Log.i("MainActivity", ">> MacAddress: " + wifi.getMacAddress());
 		Log.i("MainActivity", ">> SSID: " + wifi.getSSID());
 		Log.i("MainActivity", ">> IP: " + wifi.getIpAddress());
+		Log.i("MainActivity", ">> NETWORD ID: " + wifi.getNetworkId());
 		
-		if(wifi != null && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI){
-			TimeControl.updateLastNetwork(wifi.getMacAddress());
+		if(wifi != null){
+			database = new DatabaseHelper(context);
+			RedeService redeService = new RedeService(database);
+			
+			redeService.salvarRede(rede);
+			
+			TimeControl.updateLastNetwork(wifi);
 			Toast.makeText(context, "MacAddress: " + wifi.getMacAddress()  +  " \nSSID: " + wifi.getSSID(), Toast.LENGTH_SHORT).show();
 		}
 		
 		TimeControl.updateLastCheck();
 	}
+	
 }

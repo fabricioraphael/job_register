@@ -2,12 +2,13 @@ package com.devtime.job_register;
 
 import java.util.Date;
 
+import android.net.wifi.WifiInfo;
 import android.util.Log;
 
 public class TimeControl {
 
 	private static Long lastCheck = null;
-	private static String lastNetwork = null;
+	private static WifiInfo lastNetwork = null;
 	
 	public static Long getLastCheck(){
 		return lastCheck;
@@ -21,11 +22,11 @@ public class TimeControl {
 	}
 	
 	
-	public static String getLastNetwork(){
+	public static WifiInfo getLastNetwork(){
 		return lastNetwork;
 	}
 	
-	public static void updateLastNetwork(String network){
+	public static void updateLastNetwork(WifiInfo network){
 		Log.i("MainActivity", "LastNetwork updated: " + network);
 		lastNetwork = network;
 	}

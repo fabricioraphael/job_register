@@ -1,4 +1,10 @@
-package com.devtime.job_register;
+package com.devtime.job_register.activity;
+
+import com.devtime.job_register.R;
+import com.devtime.job_register.R.id;
+import com.devtime.job_register.R.layout;
+import com.devtime.job_register.R.menu;
+import com.devtime.job_register.helper.DatabaseHelper;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -14,6 +20,7 @@ public class MainActivity extends Activity {
 
 	private Context context;
 	SharedPreferences preferencias;
+	DatabaseHelper database;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,23 +28,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		context = this;
 		
-//		IntentFilter intentFilter = new IntentFilter();
-//		// intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
-//		intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-//		registerReceiver(broadcastReceiver, intentFilter);
+		database = new DatabaseHelper(context);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 	}
-
-	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-
-		}
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,6 +49,13 @@ public class MainActivity extends Activity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onDestroy() {
+		database.close();
+		super.onDestroy();
 	}
 }
