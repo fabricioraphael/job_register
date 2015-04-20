@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.devtime.job_register.TimeControl;
 import com.devtime.job_register.domain.Rede;
 import com.devtime.job_register.helper.DatabaseHelper;
+import com.devtime.job_register.service.HoraTrabalhadaService;
 import com.devtime.job_register.service.RedeService;
 import com.devtime.job_register.util.ApplicationJobRegister;
 
@@ -23,7 +24,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 	private static final Long MINUT_IN_MILESECONDS = 60000l;
 	
 	private Long lastCheck;
-	private WifiInfo lastNetwork;
+	private Rede lastNetwork;
 	
 	private DatabaseHelper database;
 	
@@ -43,10 +44,10 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		WifiInfo wifi = ApplicationJobRegister.getNetworkWifi(context);
 		
 		if(lastNetwork != null){
-			Log.i("MainActivity", "Atual: " + wifi.getSSID() + ". Ultima: " + lastNetwork.getSSID());
+			Log.i("MainActivity", "Atual: " + wifi.getSSID() + ". Ultima: " + lastNetwork.getSsid());
 		
 			if(wifi.getMacAddress().equals(lastNetwork.getMacAddress()) && 
-					wifi.getSSID().equals(lastNetwork.getSSID())){
+					wifi.getSSID().equals(lastNetwork.getSsid())){
 				Log.i("MainActivity", "Mesma rede ja conectada foi detectada, segue a vida...");
 				return;
 			}
@@ -82,12 +83,18 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		
 		if(wifi != null){
 			database = new DatabaseHelper(context);
+			
 			RedeService redeService = new RedeService(database);
+			int redeId = (int) redeService.salvarRede(rede);
+			rede.setId(redeId);
 			
-			redeService.salvarRede(rede);
+			HoraTrabalhadaService horaService = new HoraTrabalhadaService(database);
+			horaService.registrarInicioConexao(rede, lastNetwork);
 			
-			TimeControl.updateLastNetwork(wifi);
-			Toast.makeText(context, "MacAddress: " + wifi.getMacAddress()  +  " \nSSID: " + wifi.getSSID(), Toast.LENGTH_SHORT).show();
+			TimeControl.updateLastNetwork(rede);
+			Toast.makeText(context, wifi.getSSID() +  "\n" + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+			
+			database.close();
 		}
 		
 		TimeControl.updateLastCheck();

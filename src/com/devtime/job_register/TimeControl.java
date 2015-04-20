@@ -5,10 +5,12 @@ import java.util.Date;
 import android.net.wifi.WifiInfo;
 import android.util.Log;
 
+import com.devtime.job_register.domain.Rede;
+
 public class TimeControl {
 
 	private static Long lastCheck = null;
-	private static WifiInfo lastNetwork = null;
+	private static Rede lastNetwork = null;
 	
 	public static Long getLastCheck(){
 		return lastCheck;
@@ -22,11 +24,11 @@ public class TimeControl {
 	}
 	
 	
-	public static WifiInfo getLastNetwork(){
+	public static Rede getLastNetwork(){
 		return lastNetwork;
 	}
 	
-	public static void updateLastNetwork(WifiInfo network){
+	public static void updateLastNetwork(Rede network){
 		Log.i("MainActivity", "LastNetwork updated: " + network);
 		lastNetwork = network;
 	}
