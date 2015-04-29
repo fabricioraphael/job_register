@@ -39,7 +39,10 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		}
 		
 		lastCheck = TimeControl.getLastCheck();
-		lastNetwork = TimeControl.getLastNetwork();
+		
+		database = new DatabaseHelper(context);
+		RedeService redeService = new RedeService(database);
+		lastNetwork = redeService.getLastNetworkConnected();
 
 		WifiInfo wifi = ApplicationJobRegister.getNetworkWifi(context);
 		
@@ -82,21 +85,16 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		Log.i("MainActivity", ">> NETWORD ID: " + wifi.getNetworkId());
 		
 		if(wifi != null){
-			database = new DatabaseHelper(context);
-			
-			RedeService redeService = new RedeService(database);
 			int redeId = (int) redeService.salvarRede(rede);
 			rede.setId(redeId);
 			
 			HoraTrabalhadaService horaService = new HoraTrabalhadaService(database);
 			horaService.registrarInicioConexao(rede, lastNetwork);
 			
-			TimeControl.updateLastNetwork(rede);
 			Toast.makeText(context, wifi.getSSID() +  "\n" + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
-			
-			database.close();
 		}
 		
+		database.close();
 		TimeControl.updateLastCheck();
 	}
 	

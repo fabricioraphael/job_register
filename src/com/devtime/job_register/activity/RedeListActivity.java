@@ -30,7 +30,6 @@ public class RedeListActivity extends ListActivity {
 		
 		SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
 		setListAdapter(adapter);
-		
 	}
 	
 	private List<Map<String, Object>>  listarRedes(){

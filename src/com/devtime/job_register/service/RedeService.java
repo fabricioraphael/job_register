@@ -60,4 +60,33 @@ public class RedeService {
 
 		return 0;
 	}
+	
+	public Rede getLastNetworkConnected(){
+		String sql = "SELECT r._id, r.ssid, r.mac_address, r.tipo_id, h._id FROM " + TabelaEnum.HORA_TRABALHADA + " h " +
+				" INNER JOIN " + TabelaEnum.REDE + " r " +
+				" ON (r._id = h.rede_id) " + 
+				" WHERE h.hora_fim IS NULL " + 
+				" ORDER BY h._id DESC LIMIT 1";
+		
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		
+		Cursor cursor = db.rawQuery(sql, new String[]{});
+		
+		cursor.moveToFirst();
+		
+		if(cursor.getCount() > 0){
+			Rede rede = new Rede();
+			rede.setId(cursor.getInt(0));
+			rede.setSsid(cursor.getString(1));
+			rede.setMacAddress(cursor.getString(2));
+			rede.setTipoId(cursor.getInt(3));
+
+			Log.i("MainActivity", "Ultima rede reperada: " + rede.getId() + " - " + rede.getSsid());
+			Log.i("MainActivity", "Hora trabalhada id: " + cursor.getInt(4));
+			
+			return rede;
+		}
+		
+		return null;
+	}
 }
