@@ -25,8 +25,8 @@ public class RedeListActivity extends ListActivity {
 		
 		databaseHelper = new DatabaseHelper(this);
 		
-		String[] de = {"id", "ssid", "ip", "tipo_id", "tipo_desc"};
-		int[] para = { R.id.id, R.id.ssid, R.id.ip, R.id.tipo_id, R.id.tipo_desc };
+		String[] de = {"id", "ssid", "ip", "tipo_desc"};
+		int[] para = { R.id.id, R.id.ssid, R.id.ip, R.id.tipo_desc };
 		
 		SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
 		setListAdapter(adapter);
@@ -51,7 +51,7 @@ public class RedeListActivity extends ListActivity {
 			item.put("mac_address", cursor.getString(2));
 			item.put("ip", cursor.getString(3));
 			item.put("tipo_id", cursor.getInt(4));
-			item.put("tipo_desc", cursor.getInt(5));
+			item.put("tipo_desc", cursor.getString(5));
 			
 			redes.add(item);
 			cursor.moveToNext();

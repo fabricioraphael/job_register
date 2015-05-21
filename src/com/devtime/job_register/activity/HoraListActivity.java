@@ -1,19 +1,21 @@
 package com.devtime.job_register.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.devtime.job_register.R;
-import com.devtime.job_register.enums.TabelaEnum;
-import com.devtime.job_register.helper.DatabaseHelper;
 
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.SimpleAdapter;
+
+import com.devtime.job_register.R;
+import com.devtime.job_register.enums.TabelaEnum;
+import com.devtime.job_register.helper.DatabaseHelper;
 
 public class HoraListActivity extends ListActivity {
 
@@ -60,9 +62,24 @@ public class HoraListActivity extends ListActivity {
 				totalInMinuts = totalInSeconds/60;
 			}
 			
+			String dataInicioStr = "";
+			String dataFimStr = "";
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+			if(horaInicioStr != null && !horaInicioStr.equals("")){
+				Date dataInicio = new Date(Long.parseLong(horaInicioStr));
+				dataInicioStr = dataInicio instanceof Date ? dateFormat.format(dataInicio) : "";
+			}
+			
+			if(horaFimStr != null && !horaFimStr.equals("")){
+				Date dataFim = new Date(Long.parseLong(horaFimStr));
+				dataFimStr = dataFim instanceof Date ? dateFormat.format(dataFim) : "";
+			}
+			
 			item.put("rede_id", cursor.getInt(0));
-			item.put("hora_inicio", horaInicioStr);
-			item.put("hora_fim", horaFimStr);
+			item.put("hora_inicio", dataInicioStr);
+			item.put("hora_fim", dataFimStr);
 			item.put("total", totalInMinuts);
 			
 			redes.add(item);

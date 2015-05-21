@@ -21,7 +21,7 @@ import com.devtime.job_register.util.ApplicationJobRegister;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 	
-	private static final Long MINUT_IN_MILESECONDS = 60000l;
+	private static final Long TEN_MINUTS_IN_MILESECONDS = 600000l;
 	
 	private Long lastCheck;
 	private Rede lastNetwork;
@@ -61,11 +61,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			
 			long diference = now - lastCheck; 
 			
-			if(diference < MINUT_IN_MILESECONDS){
-				Log.i("MainActivity", "Diferença: " + diference + ". Menor que 1 minuto, segue a vida...");
+			if(diference < TEN_MINUTS_IN_MILESECONDS){
+				Log.i("MainActivity", "Diferença: " + diference + ". Menor que 10 minutos, segue a vida...");
 				return;
 			}else{
-				Log.i("MainActivity", "Diferença: " + diference + ". Maior que 1 minuto. IDENTIFICA A NOVA REDE. ");
+				Log.i("MainActivity", "Diferença: " + diference + ". Maior que 10 minutos. IDENTIFICA A NOVA REDE. ");
 			}
 		}else{
 			Log.i("MainActivity", "PRIMEIRA CONEXAO IDENTIFICADA");
