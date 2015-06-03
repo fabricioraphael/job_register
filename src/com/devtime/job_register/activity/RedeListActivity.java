@@ -5,19 +5,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
 
 import com.devtime.job_register.R;
 import com.devtime.job_register.enums.TabelaEnum;
 import com.devtime.job_register.helper.DatabaseHelper;
 
-public class RedeListActivity extends ListActivity {
+public class RedeListActivity extends ListActivity implements OnItemClickListener, OnClickListener {
 
 	private DatabaseHelper databaseHelper;
+	private AlertDialog alertDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +44,12 @@ public class RedeListActivity extends ListActivity {
 		
 		SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
 		setListAdapter(adapter);
+		
+		Log.i("MainActivity", "pre criar");
+		
+		this.alertDialog = criaAlertDialog();
+		
+		Log.i("MainActivity", "pos criar");
 	}
 	
 	private List<Map<String, Object>>  listarRedes(){
@@ -61,4 +81,40 @@ public class RedeListActivity extends ListActivity {
 		
 		return redes;
 	}
+	
+	
+	private AlertDialog criaAlertDialog(){
+		Log.i("MainActivity", "Entrou no criar alert dialog");
+		
+		CharSequence itens[] = {
+				getString(R.string.ver_horas),
+				getString(R.string.remover_rede)
+		};
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.opcoes);
+		builder.setItems(itens, this);
+		
+		return builder.create();
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int item) {
+		switch (item) {
+			case 0:
+				Toast.makeText(this, "Ver Horas selecionado", Toast.LENGTH_LONG);
+				break;
+	
+			case 1:
+				Toast.makeText(this, "Remover selecionado", Toast.LENGTH_LONG);
+				break;
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+		Log.i("MainActivity", "position: " + position);
+		alertDialog.show();
+	}
+
 }
