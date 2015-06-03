@@ -13,18 +13,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.devtime.job_register.R;
+import com.devtime.job_register.adapter.ListaRedeAdapter;
+import com.devtime.job_register.domain.Rede;
 import com.devtime.job_register.enums.TabelaEnum;
 import com.devtime.job_register.helper.DatabaseHelper;
 
@@ -39,11 +36,10 @@ public class RedeListActivity extends ListActivity implements OnItemClickListene
 		
 		databaseHelper = new DatabaseHelper(this);
 		
-		String[] de = {"id", "ssid", "ip", "tipo_desc"};
-		int[] para = { R.id.id, R.id.ssid, R.id.ip, R.id.tipo_desc };
-		
-		SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
+		ListaRedeAdapter adapter = new ListaRedeAdapter(this, listarRedes2());
 		setListAdapter(adapter);
+		
+		//SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
 		
 		Log.i("MainActivity", "pre criar");
 		
@@ -82,6 +78,35 @@ public class RedeListActivity extends ListActivity implements OnItemClickListene
 		return redes;
 	}
 	
+	private List<Rede> listarRedes2(){
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		
+		String sql = "SELECT _id, ssid, mac_address, ip, tipo_id, tipo_desc FROM " + TabelaEnum.REDE.getNome();
+		
+		Cursor cursor = db.rawQuery(sql, null);
+		
+		cursor.moveToFirst();
+		
+		List<Rede> redes = new ArrayList<Rede>();
+		
+		for(int i=0; i < cursor.getCount(); i++){
+			Rede rede = new Rede();
+			rede.setId(cursor.getInt(0));
+			rede.setSsid(cursor.getString(1));
+			rede.setMacAddress(cursor.getString(2));
+			rede.setIp(cursor.getString(3));
+			rede.setTipoId(cursor.getInt(4));
+			rede.setTipoDescricao(cursor.getString(5));
+			
+			redes.add(rede);
+			
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		
+		return redes;
+	}
 	
 	private AlertDialog criaAlertDialog(){
 		Log.i("MainActivity", "Entrou no criar alert dialog");
