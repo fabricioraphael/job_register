@@ -30,6 +30,7 @@
 
         <activity android:name="com.devtime.job_register.activity.HoraListActivity" />
         <activity android:name="com.devtime.job_register.activity.RedeListActivity" />
+        <activity android:name="com.devtime.job_register.activity.RedeActivity" />
         
         <receiver
             android:name="com.devtime.job_register.broadcastReceiver.ConnectionChangeReceiver"

@@ -36,7 +36,7 @@ public class RedeListActivity extends ListActivity implements OnItemClickListene
 		
 		databaseHelper = new DatabaseHelper(this);
 		
-		ListaRedeAdapter adapter = new ListaRedeAdapter(this, listarRedes2());
+		ListaRedeAdapter adapter = new ListaRedeAdapter(this, listarRedes());
 		setListAdapter(adapter);
 		
 		//SimpleAdapter adapter = new SimpleAdapter(this, listarRedes(), R.layout.lista_rede, de, para);
@@ -48,37 +48,7 @@ public class RedeListActivity extends ListActivity implements OnItemClickListene
 		Log.i("MainActivity", "pos criar");
 	}
 	
-	private List<Map<String, Object>>  listarRedes(){
-		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		
-		String sql = "SELECT _id, ssid, mac_address, ip, tipo_id, tipo_desc FROM " + TabelaEnum.REDE.getNome();
-		
-		Cursor cursor = db.rawQuery(sql, null);
-		
-		cursor.moveToFirst();
-		
-		List<Map<String, Object>> redes = new ArrayList<Map<String, Object>>();
-		
-		for(int i=0; i < cursor.getCount(); i++){
-			Map<String, Object> item = new HashMap<String, Object>();
-			
-			item.put("id", cursor.getInt(0));
-			item.put("ssid", cursor.getString(1));
-			item.put("mac_address", cursor.getString(2));
-			item.put("ip", cursor.getString(3));
-			item.put("tipo_id", cursor.getInt(4));
-			item.put("tipo_desc", cursor.getString(5));
-			
-			redes.add(item);
-			cursor.moveToNext();
-		}
-		
-		cursor.close();
-		
-		return redes;
-	}
-	
-	private List<Rede> listarRedes2(){
+	private List<Rede> listarRedes(){
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
 		
 		String sql = "SELECT _id, ssid, mac_address, ip, tipo_id, tipo_desc FROM " + TabelaEnum.REDE.getNome();

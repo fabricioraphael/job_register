@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.devtime.job_register.R;
+import com.devtime.job_register.activity.HoraListActivity;
+import com.devtime.job_register.activity.RedeActivity;
 import com.devtime.job_register.domain.Rede;
 
 public class ListaRedeAdapter extends BaseAdapter{
@@ -53,9 +56,9 @@ public class ListaRedeAdapter extends BaseAdapter{
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		final Rede item = (Rede) getItem(position);
+		final Rede redeClicada = (Rede) getItem(position);
 
-		Log.i("MainActivity", "id do item: " + item.getId());
+		Log.i("MainActivity", "id do item: " + redeClicada.getId());
 		
 		if (convertView == null) {
 			Log.i("MainActivity", "convertView null");
@@ -70,34 +73,32 @@ public class ListaRedeAdapter extends BaseAdapter{
 
 			convertView.setTag(holder);
 			
-			
-			
 		} else {
 			Log.i("MainActivity", "convertView existente");
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.redeId.setText(item.getId() + "");
-		holder.nome.setText(item.getSsid() + "");
-		holder.ip.setText(item.getIp() + "");
-		holder.tipo.setText(item.getTipoDescricao() + "");
+		holder.redeId.setText(redeClicada.getId() + "");
+		holder.nome.setText(redeClicada.getSsid() + "");
+		holder.ip.setText(redeClicada.getIp() + "");
+		holder.tipo.setText(redeClicada.getTipoDescricao() + "");
 		
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				CharSequence itens[] = {
-//						getString(R.string.ver_horas),
-//						getString(R.string.remover_rede)
-//				};
-				
 				final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
 				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						Intent intent;
+						
 						switch (which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								Log.i("MainActivity", "clicou sim");
+								Log.i("MainActivity", "Clicou sim. Item " + redeClicada.getId());
+								intent = new Intent(context, RedeActivity.class);
+								intent.putExtra("rede_id", redeClicada.getId() + "");
+								context.startActivity(intent);
 								break;
 	
 							case DialogInterface.BUTTON_NEGATIVE:
@@ -110,7 +111,7 @@ public class ListaRedeAdapter extends BaseAdapter{
 				
 				builder.setTitle(R.string.opcoes);
 				
-				builder.setMessage("Rede clicada: " + item.getSsid());
+				builder.setMessage("Rede clicada: " + redeClicada.getSsid());
 				
 				builder.setPositiveButton("Sim", dialogClickListener);
 				builder.setNegativeButton("Não", dialogClickListener);
