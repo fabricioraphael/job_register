@@ -1,5 +1,8 @@
 package com.devtime.job_register.domain;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class Hora {
 
@@ -24,6 +27,24 @@ public class Hora {
 	}
 	public void setDataFim(String dataFim) {
 		this.dataFim = dataFim;
+	}
+	
+	public String getDataInicioFormatada(){
+		if(dataInicio == null || dataInicio.equals("")){
+			return "";
+		}
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		return dateFormat.format(new Date(Long.parseLong(dataInicio)));
+	}
+	
+	public String getDataFimFormatada(){
+		if(dataFim == null || dataFim.equals("")){
+			return "";
+		}
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		return dateFormat.format(new Date(Long.parseLong(dataFim)));
 	}
 	
 	

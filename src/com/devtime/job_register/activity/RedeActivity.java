@@ -55,9 +55,11 @@ public class RedeActivity extends ListActivity implements OnItemClickListener, O
 			Hora hora = new Hora();
 			hora.setId(cursor.getInt(0));
 			hora.setDataInicio(cursor.getString(1));
-			hora.setDataFim(cursor.getString(1));
+			hora.setDataFim(cursor.getString(2));
 			
 			listaHoras.add(hora);
+			
+			cursor.moveToNext();
 		}
 		
 		cursor.close();

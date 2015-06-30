@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils.StringSplitter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +57,9 @@ public class ListaHoraAdapter extends BaseAdapter{
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		final Hora item = (Hora) getItem(position);
+		final Hora horaItem = (Hora) getItem(position);
 
-		Log.i("MainActivity", "id do item: " + item.getId());
+		Log.i("MainActivity", "id do item: " + horaItem.getId());
 		
 		if (convertView == null) {
 			Log.i("MainActivity", "convertView null");
@@ -77,9 +78,16 @@ public class ListaHoraAdapter extends BaseAdapter{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.dataInicio.setText(item.getDataInicio());
-		holder.dataFim.setText(item.getDataFim());
-		holder.duracao.setText("");
+		Long totalInMinuts = 0l;
+		
+		if(horaItem.getDataFim() != null && !horaItem.getDataFim().equals("")){
+			long total = Long.parseLong(horaItem.getDataFim()) - Long.parseLong(horaItem.getDataInicio());
+			totalInMinuts = (total/1000)/60;
+		}
+		
+		holder.dataInicio.setText(horaItem.getDataInicioFormatada());
+		holder.dataFim.setText(horaItem.getDataFimFormatada());
+		holder.duracao.setText(totalInMinuts + "");
 		
 		
 		return convertView;
