@@ -111,7 +111,7 @@ public class ListaRedeAdapter extends BaseAdapter{
 				
 				builder.setTitle(R.string.opcoes);
 				
-				builder.setMessage("Ver horas conetado em: " + redeClicada.getSsid());
+				builder.setMessage("Ver horas conectado em: " + redeClicada.getSsid());
 				
 				builder.setPositiveButton("Sim", dialogClickListener);
 				builder.setNegativeButton("Não", dialogClickListener);
